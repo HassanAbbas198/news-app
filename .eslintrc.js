@@ -12,5 +12,6 @@ module.exports = {
     'arrow-body-style': 'warn',
     'arrow-parens': 'warn',
     'prefer-const': 'warn',
+    'object-curly-spacing': 'never',
   },
 };
