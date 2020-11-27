@@ -17,6 +17,7 @@ const useHttp = (httpClinet) => {
       ];
       setError(fallbackValue[0].title);
       setShow(true);
+
       return Promise.reject(fallbackValue);
     },
   );
@@ -33,6 +34,7 @@ const useHttp = (httpClinet) => {
     setError(null);
     setShow(false);
   };
+
   return [error, show, dismissErrorHandler];
 };
 

@@ -1,4 +1,4 @@
-// import * as actionTypes from '../actions/actionTypes';
+import * as actionTypes from '../actions/actionTypes';
 
 const initialState = {
   news: [],
@@ -6,9 +6,10 @@ const initialState = {
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
-    case 'hi':
+    case actionTypes.SET_NEWS:
       return {
         ...state,
+        news: action.news,
       };
 
     default:
