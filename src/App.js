@@ -1,5 +1,8 @@
 import React from 'react';
 import {StyleSheet, View, Text} from 'react-native';
+import {combineReducers, createStore, applyMiddleware} from 'redux';
+import {Provider} from 'react-redux';
+import thunk from 'redux-thunk';
 
 const App = () => {
   return (
