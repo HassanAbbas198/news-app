@@ -1,1 +1,1 @@
-export { fetchNews } from './news';
+export { fetchNews, getSelectedNews } from './news';

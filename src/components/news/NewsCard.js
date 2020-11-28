@@ -19,7 +19,7 @@ const NewsCard = (props) => {
   }
 
   return (
-    <Card styles={styles.news}>
+    <Card styles={{ ...props.styles, ...styles.news }}>
       <View>
         <TouchableComponent onPress={props.onSelect} useForeground>
           <View>
@@ -28,6 +28,7 @@ const NewsCard = (props) => {
             </View>
             <View style={styles.textContainer}>
               <Text style={styles.title}>{props.title}</Text>
+              <Text numberOfLines={2}>{props.description}</Text>
             </View>
           </View>
         </TouchableComponent>
@@ -39,7 +40,7 @@ const NewsCard = (props) => {
 const styles = StyleSheet.create({
   news: {
     height: 300,
-    margin: 20,
+    margin: 10,
   },
 
   touchable: {
@@ -61,14 +62,15 @@ const styles = StyleSheet.create({
   },
 
   textContainer: {
-    alignItems: 'center',
-    height: '17%',
-    padding: 10,
+    alignItems: 'flex-start',
+    height: '23%',
+    padding: 11,
   },
 
   title: {
     fontSize: 18,
-    marginVertical: 2,
+    fontWeight: 'bold',
+    marginVertical: 6,
   },
 });
 

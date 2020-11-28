@@ -2,6 +2,7 @@ import * as actionTypes from '../actions/actionTypes';
 
 const initialState = {
   news: [],
+  selectedNews: null,
 };
 
 const reducer = (state = initialState, action) => {
@@ -11,6 +12,14 @@ const reducer = (state = initialState, action) => {
         ...state,
         news: action.news,
       };
+
+    case actionTypes.GET_SINGLE_NEWS: {
+      const selectedNews = state.news.find((n) => n.id === action.id);
+      return {
+        ...state,
+        selectedNews,
+      };
+    }
 
     default:
       return state;
