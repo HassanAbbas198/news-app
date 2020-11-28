@@ -8,6 +8,7 @@ import {
   View,
 } from 'react-native';
 import { useSelector } from 'react-redux';
+import Share from 'react-native-share';
 import moment from 'moment';
 
 import Colors from '../../constants/Colors';
@@ -20,6 +21,19 @@ const CustomModal = (props) => {
   const selectedNews = useSelector((state) => state.news.selectedNews);
 
   const formatedDate = moment(selectedNews.date).format('ddd, MMMM DD, YYYY');
+  const url = selectedNews.url;
+
+  const shareLink = async () => {
+    const shareOptions = {
+      title: 'Share via',
+      url,
+    };
+    try {
+      await Share.open(shareOptions);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <View style={{ flex: 1 }}>
@@ -47,6 +61,13 @@ const CustomModal = (props) => {
               <Text style={styles.title}>{selectedNews.title}</Text>
               <Text style={styles.description}>{selectedNews.description}</Text>
             </View>
+            <View style={styles.buttonContainer}>
+              <Button
+                title="Share link"
+                color={Colors.secondary}
+                onPress={shareLink}
+              />
+            </View>
           </Card>
         </Modal>
       </ScrollView>
@@ -58,8 +79,9 @@ export default CustomModal;
 
 const styles = StyleSheet.create({
   modal: {
-    height: '65%',
+    height: '70%',
     alignItems: 'center',
+    justifyContent: 'flex-start',
     overflow: 'hidden',
   },
 
@@ -102,6 +124,15 @@ const styles = StyleSheet.create({
   description: {
     marginVertical: 4,
     fontSize: 16,
+  },
+
+  buttonContainer: {
+    flexDirection: 'row',
+    width: '100%',
+    justifyContent: 'flex-end',
+    position: 'absolute',
+    right: 5,
+    bottom: 5,
   },
 });
 

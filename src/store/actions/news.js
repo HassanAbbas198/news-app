@@ -34,6 +34,7 @@ export const fetchNews = () => {
         description: news[key].snippet,
         category: news[key].subsection_name,
         date: news[key].pub_date,
+        url: news[key].web_url,
       });
     }
 
