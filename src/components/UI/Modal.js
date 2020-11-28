@@ -1,6 +1,14 @@
 import React, { useState } from 'react';
-import { Button, Image, StyleSheet, Text, View } from 'react-native';
+import {
+  Button,
+  Image,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import { useSelector } from 'react-redux';
+import moment from 'moment';
 
 import Colors from '../../constants/Colors';
 
@@ -9,22 +17,40 @@ import Card from './Card';
 
 const CustomModal = (props) => {
   const [isVisible, setIsVisible] = useState(true);
-
   const selectedNews = useSelector((state) => state.news.selectedNews);
 
+  const formatedDate = moment(selectedNews.date).format('ddd, MMMM DD, YYYY');
+
   return (
-    <Modal isVisible={isVisible} animationIn="zoomIn" animationOut="zoomOut">
-      <Card styles={styles.modal}>
-        <View style={styles.imageContainer}>
-          <Image source={{ uri: selectedNews.imageUrl }} style={styles.image} />
-        </View>
-        <View style={styles.textContainer}>
-          <Text>{selectedNews.category}</Text>
-          <Text style={styles.title}>{selectedNews.title}</Text>
-          <Text>{selectedNews.description}</Text>
-        </View>
-      </Card>
-    </Modal>
+    <View style={{ flex: 1 }}>
+      <ScrollView>
+        <Modal
+          isVisible={isVisible}
+          animationIn="zoomIn"
+          animationOut="zoomOut"
+          onBackdropPress={() => {
+            setIsVisible(false);
+            props.onClose();
+          }}>
+          <Card styles={styles.modal}>
+            <View style={styles.imageContainer}>
+              <Image
+                source={{ uri: selectedNews.imageUrl }}
+                style={styles.image}
+              />
+            </View>
+            <View style={styles.headerContainer}>
+              <Text style={styles.headerText}>{selectedNews.category}</Text>
+              <Text style={styles.headerText}>{formatedDate}</Text>
+            </View>
+            <View style={styles.textContainer}>
+              <Text style={styles.title}>{selectedNews.title}</Text>
+              <Text style={styles.description}>{selectedNews.description}</Text>
+            </View>
+          </Card>
+        </Modal>
+      </ScrollView>
+    </View>
   );
 };
 
@@ -33,7 +59,6 @@ export default CustomModal;
 const styles = StyleSheet.create({
   modal: {
     height: '65%',
-
     alignItems: 'center',
     overflow: 'hidden',
   },
@@ -45,22 +70,38 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 10,
     overflow: 'hidden',
   },
-
   image: {
     width: '100%',
     height: '100%',
   },
 
+  headerContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
+    marginTop: 4,
+  },
+
+  headerText: {
+    color: '#888',
+    fontSize: 16,
+    marginHorizontal: 10,
+  },
+
   textContainer: {
     alignItems: 'flex-start',
-    height: '23%',
-    padding: 11,
+    height: '20%',
+    padding: 9,
   },
 
   title: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: 'bold',
-    marginVertical: 6,
+  },
+
+  description: {
+    marginVertical: 4,
+    fontSize: 16,
   },
 });
 

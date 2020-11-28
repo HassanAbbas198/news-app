@@ -6,7 +6,7 @@ import ENV from '../../../env';
 export const fetchNews = () => {
   return async (dispatch) => {
     const response = await axios.get(
-      `articlesearch.json?q=politics&api-key=${ENV.apiKey}`,
+      `articlesearch.json?&api-key=${ENV.apiKey}`,
     );
 
     const news = response.data.response.docs;
@@ -33,6 +33,7 @@ export const fetchNews = () => {
         imageUrl,
         description: news[key].snippet,
         category: news[key].subsection_name,
+        date: news[key].pub_date,
       });
     }
 

@@ -24,6 +24,10 @@ const NewsFeedScreen = (props) => {
     setModalVisible(true);
   };
 
+  const closeModalHandler = () => {
+    setModalVisible(false);
+  };
+
   return (
     <View>
       <FlatList
@@ -39,7 +43,7 @@ const NewsFeedScreen = (props) => {
           />
         )}
       />
-      {modalVisible && <Modal />}
+      {modalVisible && <Modal onClose={closeModalHandler} />}
     </View>
   );
 };
