@@ -1,23 +1,42 @@
-import React, { useEffect, useState } from 'react';
-import { FlatList, StyleSheet, View } from 'react-native';
+import React, { useCallback, useEffect, useState } from 'react';
+import {
+  ActivityIndicator,
+  Alert,
+  FlatList,
+  StyleSheet,
+  View,
+} from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import axios from '../axios-orders';
 
 import * as actions from '../store/actions/index';
-import withErrorHandler from '../hoc/withErrorHandler';
+import Colors from '../constants/Colors';
 
 import NewsCard from '../components/news/NewsCard';
 import Modal from '../components/UI/Modal';
 
 const NewsFeedScreen = (props) => {
   const [modalVisible, setModalVisible] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   const dispatch = useDispatch();
   const news = useSelector((state) => state.news.news);
 
-  useEffect(() => {
-    dispatch(actions.fetchNews());
+  const loadNews = useCallback(async () => {
+    try {
+      setError(null);
+      setIsLoading(true);
+      await dispatch(actions.fetchNews());
+      setIsLoading(false);
+    } catch (err) {
+      setError(err.message);
+      setIsLoading(false);
+    }
   }, []);
+
+  useEffect(() => {
+    loadNews();
+  }, [loadNews]);
 
   const selectItemHandler = (id) => {
     dispatch(actions.getSelectedNews(id));
@@ -27,6 +46,31 @@ const NewsFeedScreen = (props) => {
   const closeModalHandler = () => {
     setModalVisible(false);
   };
+
+  if (error) {
+    Alert.alert('Oops!', error, [
+      {
+        text: 'Cancel',
+        onPress: () => {
+          setError(null);
+        },
+      },
+      {
+        text: 'Try again',
+        onPress: () => {
+          loadNews();
+        },
+      },
+    ]);
+  }
+
+  if (isLoading) {
+    return (
+      <View style={styles.centered}>
+        <ActivityIndicator size="large" color={Colors.primary} />
+      </View>
+    );
+  }
 
   return (
     <View>
@@ -48,12 +92,12 @@ const NewsFeedScreen = (props) => {
   );
 };
 
-// const styles = StyleSheet.create({
-//   screen: {
-//     width: '93%',
-//     height: '95%',
-//     alignItems: 'center',
-//   },
-// });
+const styles = StyleSheet.create({
+  centered: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});
 
-export default withErrorHandler(NewsFeedScreen, axios);
+export default NewsFeedScreen;

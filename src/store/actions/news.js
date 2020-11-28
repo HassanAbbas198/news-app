@@ -5,43 +5,47 @@ import ENV from '../../../env';
 
 export const fetchNews = () => {
   return async (dispatch) => {
-    const response = await axios.get(
-      `articlesearch.json?&api-key=${ENV.apiKey}`,
-    );
+    try {
+      const response = await axios.get(
+        `articlesearch.json?&api-key=${ENV.apiKey}`,
+      );
 
-    const news = response.data.response.docs;
-    const loadedNews = [];
+      const news = response.data.response.docs;
+      const loadedNews = [];
 
-    let imageUrl;
-    let title;
-    for (const key in news) {
-      for (const x in news[key].multimedia) {
-        if (news[key].multimedia[x].subtype === 'popup') {
-          imageUrl = `https://www.nytimes.com/${news[key].multimedia[x].url}`;
+      let imageUrl;
+      let title;
+      for (const key in news) {
+        for (const x in news[key].multimedia) {
+          if (news[key].multimedia[x].subtype === 'popup') {
+            imageUrl = `https://www.nytimes.com/${news[key].multimedia[x].url}`;
+          }
         }
+
+        if (news[key].headline.print_headline) {
+          title = news[key].headline.print_headline;
+        } else {
+          title = news[key].headline.main;
+        }
+
+        loadedNews.push({
+          id: news[key]._id,
+          title,
+          imageUrl,
+          description: news[key].snippet,
+          category: news[key].subsection_name,
+          date: news[key].pub_date,
+          url: news[key].web_url,
+        });
       }
 
-      if (news[key].headline.print_headline) {
-        title = news[key].headline.print_headline;
-      } else {
-        title = news[key].headline.main;
-      }
-
-      loadedNews.push({
-        id: news[key]._id,
-        title,
-        imageUrl,
-        description: news[key].snippet,
-        category: news[key].subsection_name,
-        date: news[key].pub_date,
-        url: news[key].web_url,
+      dispatch({
+        type: actionTypes.SET_NEWS,
+        news: loadedNews,
       });
+    } catch (error) {
+      throw new Error('Failed to fetch news');
     }
-
-    dispatch({
-      type: actionTypes.SET_NEWS,
-      news: loadedNews,
-    });
   };
 };
 
