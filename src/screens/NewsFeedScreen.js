@@ -1,10 +1,12 @@
 import React, { useEffect } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { FlatList, StyleSheet } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from '../axios-orders';
 
 import withErrorHandler from '../hoc/withErrorHandler';
 import * as actions from '../store/actions/index';
+
+import NewsCard from '../components/news/NewsCard';
 
 const NewsFeedScreen = (props) => {
   const news = useSelector((state) => state.news.news);
@@ -15,9 +17,15 @@ const NewsFeedScreen = (props) => {
   }, []);
 
   return (
-    <View style={styles.screen}>
-      <Text>hello from news feed</Text>
-    </View>
+    <FlatList
+      data={news}
+      renderItem={(itemData) => (
+        <NewsCard
+          image={itemData.item.imageUrl}
+          title={itemData.item.headline}
+        />
+      )}
+    />
   );
 };
 
@@ -26,8 +34,6 @@ const styles = StyleSheet.create({
     width: '93%',
     height: '95%',
     alignItems: 'center',
-    borderWidth: 1,
-    borderColor: 'black',
   },
 });
 
