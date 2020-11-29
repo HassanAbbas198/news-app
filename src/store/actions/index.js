@@ -1,5 +1,1 @@
-export {
-  fetchArticles,
-  fetchMoreArticles,
-  getSelectedArticle,
-} from './articles';
+export { fetchArticles, getSelectedArticle } from './articles';

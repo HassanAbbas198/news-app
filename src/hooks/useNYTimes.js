@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import * as actions from '../store/actions/index';
 
 export const useNYTimes = () => {
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(0);
   const [shouldFetch, setShouldFetch] = useState(true);
 
   const dispatch = useDispatch();
@@ -18,7 +18,7 @@ export const useNYTimes = () => {
     }
 
     const fetch = async () => {
-      await dispatch(actions.fetchMoreArticles(page));
+      await dispatch(actions.fetchArticles(page));
 
       setShouldFetch(false);
       setPage(page + 1);

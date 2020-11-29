@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
   ActivityIndicator,
   Alert,
@@ -7,10 +7,10 @@ import {
   View,
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNYTimes } from '../hooks/useNYTimes';
 
 import Colors from '../constants/Colors';
 import * as actions from '../store/actions/index';
-import { useNYTimes } from '../hooks/useNYTimes';
 
 import NewsCard from '../components/news/NewsCard';
 import Search from '../components/news/Search';
@@ -18,30 +18,14 @@ import Modal from '../components/UI/Modal';
 
 const NewsFeedScreen = (props) => {
   const [modalVisible, setModalVisible] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
 
-  const articles = useSelector((state) => state.articles.articles);
   const dispatch = useDispatch();
+  const articles = useSelector((state) => state.articles.articles);
+  const isLoading = useSelector((state) => state.articles.loading);
+  const error = useSelector((state) => state.articles.error);
 
   // custom hook
   const [fetchMore] = useNYTimes();
-
-  const loadArticles = useCallback(async () => {
-    try {
-      setError(null);
-      setIsLoading(true);
-      await dispatch(actions.fetchArticles());
-      setIsLoading(false);
-    } catch (err) {
-      setError(err.message);
-      setIsLoading(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    loadArticles();
-  }, [loadArticles]);
 
   const selectItemHandler = (id) => {
     dispatch(actions.getSelectedArticle(id));
@@ -56,14 +40,11 @@ const NewsFeedScreen = (props) => {
     Alert.alert('Oops!', error, [
       {
         text: 'Cancel',
-        onPress: () => {
-          setError(null);
-        },
       },
       {
         text: 'Try again',
         onPress: () => {
-          loadNews();
+          fetchMore();
         },
       },
     ]);

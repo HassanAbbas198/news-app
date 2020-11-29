@@ -3,20 +3,38 @@ import * as actionTypes from '../actions/actionTypes';
 const initialState = {
   articles: [],
   selectedArticle: null,
+  loading: false,
+  error: null,
 };
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
-    case actionTypes.SET_ARTICLES:
+    case actionTypes.SET_ARTICLES_SUCCESS:
       return {
         ...state,
-        articles: action.articles,
+        articles: [...state.articles, ...action.articles],
+        loading: false,
+        error: null,
       };
 
-    case actionTypes.SET_MORE_ARTICLES:
+    case actionTypes.SET_ARTICLES_START:
       return {
         ...state,
-        articles: [...state.articles, ...action.moreArticles],
+        loading: true,
+        error: null,
+      };
+
+    case actionTypes.SET_ARTICLES_FAIL:
+      return {
+        ...state,
+        error: action.error,
+      };
+
+    case actionTypes.FETCH_MORE_ARTICLES_START:
+      return {
+        ...state,
+        loading: false,
+        error: null,
       };
 
     case actionTypes.GET_SINGLE_ARTICLE: {
@@ -26,6 +44,7 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         selectedArticle,
+        error: null,
       };
     }
 
