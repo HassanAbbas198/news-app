@@ -12,6 +12,7 @@ import * as actions from '../store/actions/index';
 import Colors from '../constants/Colors';
 
 import NewsCard from '../components/news/NewsCard';
+import Search from '../components/news/Search';
 import Modal from '../components/UI/Modal';
 
 const NewsFeedScreen = (props) => {
@@ -74,6 +75,7 @@ const NewsFeedScreen = (props) => {
 
   return (
     <View>
+      <Search />
       <FlatList
         data={news}
         renderItem={(itemData) => (
