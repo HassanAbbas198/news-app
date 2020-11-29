@@ -1,5 +1,6 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
+import PropTypes from 'prop-types';
 
 const Card = (props) => {
   return (
@@ -17,5 +18,9 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
 });
+
+Card.propTypes = {
+  styles: PropTypes.object,
+};
 
 export default Card;

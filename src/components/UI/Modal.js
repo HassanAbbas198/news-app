@@ -8,6 +8,7 @@ import {
   View,
 } from 'react-native';
 import { useSelector } from 'react-redux';
+import PropTypes from 'prop-types';
 import Share from 'react-native-share';
 import moment from 'moment';
 
@@ -139,5 +140,9 @@ const styles = StyleSheet.create({
     bottom: 5,
   },
 });
+
+CustomModal.propTypes = {
+  onClose: PropTypes.func.isRequired,
+};
 
 export default CustomModal;

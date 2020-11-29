@@ -7,8 +7,8 @@ import {
   View,
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNYTimes } from '../hooks/useNYTimes';
 
+import { useNYTimes } from '../hooks/useNYTimes';
 import Colors from '../constants/Colors';
 import * as actions from '../store/actions/index';
 

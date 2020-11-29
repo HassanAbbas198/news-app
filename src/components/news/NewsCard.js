@@ -8,6 +8,7 @@ import {
   TouchableNativeFeedback,
   Platform,
 } from 'react-native';
+import PropTypes from 'prop-types';
 
 import Card from '../UI/Card';
 
@@ -73,5 +74,13 @@ const styles = StyleSheet.create({
     marginVertical: 6,
   },
 });
+
+NewsCard.propTypes = {
+  onSelect: PropTypes.func.isRequired,
+  title: PropTypes.string.isRequired,
+  description: PropTypes.string.isRequired,
+  image: PropTypes.string,
+  styles: PropTypes.object,
+};
 
 export default NewsCard;

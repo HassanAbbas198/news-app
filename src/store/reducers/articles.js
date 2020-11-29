@@ -3,8 +3,8 @@ import * as actionTypes from '../actions/actionTypes';
 const initialState = {
   articles: [],
   selectedArticle: null,
-  loading: false,
   error: null,
+  loading: false,
 };
 
 const reducer = (state = initialState, action) => {
@@ -28,6 +28,7 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         error: action.error,
+        loading: false,
       };
 
     case actionTypes.FETCH_MORE_ARTICLES_START:
