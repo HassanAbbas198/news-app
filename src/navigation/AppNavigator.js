@@ -20,7 +20,9 @@ const NewsNavigator = () => {
       <NewsStackNavigator.Screen
         name="NewsFeed"
         component={NewsFeedScreen}
-        options={{ headerTitle: 'News Feed' }}
+        options={{
+          headerTitle: 'News Feed',
+        }}
       />
     </NewsStackNavigator.Navigator>
   );

@@ -1,14 +1,13 @@
 import React from 'react';
-import { StyleSheet, View, Text } from 'react-native';
 import { combineReducers, createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
 
 import AppNavigator from './navigation/AppNavigator';
-import newsReducer from './store/reducers/news';
+import articlesReducer from './store/reducers/articles';
 
 const rootReducer = combineReducers({
-  news: newsReducer,
+  articles: articlesReducer,
 });
 const store = createStore(rootReducer, applyMiddleware(thunk));
 
@@ -19,13 +18,5 @@ const App = () => {
     </Provider>
   );
 };
-
-const styles = StyleSheet.create({
-  screen: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
 
 export default App;

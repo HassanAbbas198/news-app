@@ -1,1 +1,5 @@
-export { fetchNews, getSelectedNews } from './news';
+export {
+  fetchArticles,
+  fetchMoreArticles,
+  getSelectedArticle,
+} from './articles';

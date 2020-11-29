@@ -18,10 +18,14 @@ import Card from './Card';
 
 const CustomModal = (props) => {
   const [isVisible, setIsVisible] = useState(true);
-  const selectedNews = useSelector((state) => state.news.selectedNews);
+  const selectedArticle = useSelector(
+    (state) => state.articles.selectedArticle,
+  );
 
-  const formatedDate = moment(selectedNews.date).format('ddd, MMMM DD, YYYY');
-  const url = selectedNews.url;
+  const formatedDate = moment(selectedArticle.date).format(
+    'ddd, MMMM DD, YYYY',
+  );
+  const url = selectedArticle.url;
 
   const shareLink = async () => {
     const shareOptions = {
@@ -49,17 +53,19 @@ const CustomModal = (props) => {
           <Card styles={styles.modal}>
             <View style={styles.imageContainer}>
               <Image
-                source={{ uri: selectedNews.imageUrl }}
+                source={{ uri: selectedArticle.imageUrl }}
                 style={styles.image}
               />
             </View>
             <View style={styles.headerContainer}>
-              <Text style={styles.headerText}>{selectedNews.category}</Text>
+              <Text style={styles.headerText}>{selectedArticle.category}</Text>
               <Text style={styles.headerText}>{formatedDate}</Text>
             </View>
             <View style={styles.textContainer}>
-              <Text style={styles.title}>{selectedNews.title}</Text>
-              <Text style={styles.description}>{selectedNews.description}</Text>
+              <Text style={styles.title}>{selectedArticle.title}</Text>
+              <Text style={styles.description}>
+                {selectedArticle.description}
+              </Text>
             </View>
             <View style={styles.buttonContainer}>
               <Button

@@ -8,8 +8,9 @@ import {
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 
-import * as actions from '../store/actions/index';
 import Colors from '../constants/Colors';
+import * as actions from '../store/actions/index';
+import { useNYTimes } from '../hooks/useNYTimes';
 
 import NewsCard from '../components/news/NewsCard';
 import Search from '../components/news/Search';
@@ -20,14 +21,17 @@ const NewsFeedScreen = (props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
+  const articles = useSelector((state) => state.articles.articles);
   const dispatch = useDispatch();
-  const news = useSelector((state) => state.news.news);
 
-  const loadNews = useCallback(async () => {
+  // custom hook
+  const [fetchMore] = useNYTimes();
+
+  const loadArticles = useCallback(async () => {
     try {
       setError(null);
       setIsLoading(true);
-      await dispatch(actions.fetchNews());
+      await dispatch(actions.fetchArticles());
       setIsLoading(false);
     } catch (err) {
       setError(err.message);
@@ -36,11 +40,11 @@ const NewsFeedScreen = (props) => {
   }, []);
 
   useEffect(() => {
-    loadNews();
-  }, [loadNews]);
+    loadArticles();
+  }, [loadArticles]);
 
   const selectItemHandler = (id) => {
-    dispatch(actions.getSelectedNews(id));
+    dispatch(actions.getSelectedArticle(id));
     setModalVisible(true);
   };
 
@@ -77,7 +81,7 @@ const NewsFeedScreen = (props) => {
     <View>
       <Search />
       <FlatList
-        data={news}
+        data={articles}
         renderItem={(itemData) => (
           <NewsCard
             image={itemData.item.imageUrl}
@@ -88,6 +92,9 @@ const NewsFeedScreen = (props) => {
             }}
           />
         )}
+        contentContainerStyle={styles.contentContainer}
+        onEndReachedThreshold={0.6}
+        onEndReached={fetchMore}
       />
       {modalVisible && <Modal onClose={closeModalHandler} />}
     </View>
@@ -99,6 +106,10 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+
+  contentContainer: {
+    paddingBottom: 70,
   },
 });
 

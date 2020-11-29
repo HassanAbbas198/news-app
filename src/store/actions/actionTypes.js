@@ -1,2 +1,4 @@
-export const SET_NEWS = 'SET_NEWS';
-export const GET_SINGLE_NEWS = 'GET_SINGLE_NEWS';
+export const SET_ARTICLES = 'SET_ARTICLES';
+export const SET_MORE_ARTICLES = 'SET_MORE_ARTICLES';
+
+export const GET_SINGLE_ARTICLE = 'GET_SINGLE_ARTICLE';
