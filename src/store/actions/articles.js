@@ -2,6 +2,7 @@ import axios from '../../axios-orders';
 import * as actionTypes from './actionTypes';
 
 import ENV from '../../../env';
+import { formatData } from '../../shared/helper';
 
 const fetchArticlesSuccess = (articles) => {
   return {
@@ -29,7 +30,14 @@ const fetchMoreArticlesStart = () => {
   };
 };
 
-export const fetchArticles = (page) => {
+const fetchFilteredArticles = (filteredArticles) => {
+  return {
+    type: actionTypes.FETCH_FILTERED_ARTICLES,
+    filteredArticles,
+  };
+};
+
+export const fetchArticles = (page, query) => {
   return async (dispatch) => {
     // to show a loading spinner on the first request only
     if (page === 0) {
@@ -38,39 +46,28 @@ export const fetchArticles = (page) => {
       dispatch(fetchMoreArticlesStart());
     }
 
+    let result;
+    let articles;
+
     try {
-      const url = `articlesearch.json?&api-key=${ENV.apiKey}&page=${page}`;
+      if (query) {
+        dispatch(fetchArticlesStart());
+        const response = await axios.get(
+          `articlesearch.json?fq=${query}&api-key=${ENV.apiKey}&page=${page}`,
+        );
+        result = response.data.response.docs;
+        articles = formatData(result);
 
-      const response = await axios.get(url);
-      const articles = response.data.response.docs;
+        dispatch(fetchFilteredArticles(articles));
+      } else {
+        const response = await axios.get(
+          `articlesearch.json?&api-key=${ENV.apiKey}&page=${page}`,
+        );
+        result = response.data.response.docs;
+        articles = formatData(result);
 
-      const loadedArticles = [];
-      let imageUrl;
-      let title;
-      for (const key in articles) {
-        for (const x in articles[key].multimedia) {
-          if (articles[key].multimedia[x].subtype === 'popup') {
-            imageUrl = `https://www.nytimes.com/${articles[key].multimedia[x].url}`;
-          }
-        }
-
-        if (articles[key].headline.print_headline) {
-          title = articles[key].headline.print_headline;
-        } else {
-          title = articles[key].headline.main;
-        }
-
-        loadedArticles.push({
-          id: articles[key]._id,
-          title,
-          imageUrl,
-          description: articles[key].snippet,
-          category: articles[key].subsection_name,
-          date: articles[key].pub_date,
-          url: articles[key].web_url,
-        });
+        dispatch(fetchArticlesSuccess(articles));
       }
-      dispatch(fetchArticlesSuccess(loadedArticles));
     } catch (error) {
       dispatch(fetchArticlesFail('Failed to fetch articles'));
     }

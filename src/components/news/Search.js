@@ -1,17 +1,27 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, TextInput, View, Button } from 'react-native';
 
 import Colors from '../../constants/Colors';
 
 const Search = (props) => {
+  const [value, setValue] = useState(null);
+
   return (
     <View style={styles.searchContainer}>
       <TextInput
-        placeholder="e.g. Politics, Health, .."
+        placeholder="Search..."
         placeholderTextColor="black"
         style={styles.input}
+        value={value}
+        onChangeText={setValue}
       />
-      <Button title="search" color={Colors.secondary} />
+      <Button
+        title="search"
+        color={Colors.secondary}
+        onPress={() => {
+          props.clicked(value);
+        }}
+      />
     </View>
   );
 };
@@ -31,6 +41,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 10,
     height: 43,
+    width: '45%',
   },
 
   button: {

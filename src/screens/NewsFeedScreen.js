@@ -58,9 +58,17 @@ const NewsFeedScreen = (props) => {
     );
   }
 
+  const searchHandler = async (value) => {
+    if (!value) {
+      return;
+    }
+
+    await dispatch(actions.fetchArticles(0, value));
+  };
+
   return (
     <View>
-      <Search />
+      <Search clicked={searchHandler} />
       <FlatList
         data={articles}
         renderItem={(itemData) => (
@@ -74,7 +82,7 @@ const NewsFeedScreen = (props) => {
           />
         )}
         contentContainerStyle={styles.contentContainer}
-        onEndReachedThreshold={0.6}
+        onEndReachedThreshold={0.1}
         onEndReached={fetchMore}
       />
       {modalVisible && <Modal onClose={closeModalHandler} />}

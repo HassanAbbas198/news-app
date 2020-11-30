@@ -49,6 +49,15 @@ const reducer = (state = initialState, action) => {
       };
     }
 
+    case actionTypes.FETCH_FILTERED_ARTICLES: {
+      return {
+        ...state,
+        articles: action.filteredArticles,
+        loading: false,
+        error: null,
+      };
+    }
+
     default:
       return state;
   }
